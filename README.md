@@ -1,56 +1,73 @@
-# Welcome to your Expo app 👋
+# Hitung Zakat 
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplikasi kalkulator zakat untuk Android, iOS, dan web — dibangun dengan **Expo SDK 58 + Expo Router**,
+bertema hijau cerah dengan aksen emas sesuai identitas aplikasi zakat.
 
-## Get started
+## Fitur
 
-1. Install dependencies
+- **9 kalkulator zakat** dengan rumus fiqih (nisab, kadar, haul) yang lengkap:
+  1. **Zakat Fitrah** — per jiwa, keluaran beras/makanan pokok atau uang.
+  2. **Zakat Maal** — tabungan & kekayaan simpanan (nisab 85 g emas, 2,5%).
+  3. **Zakat Penghasilan** — gaji bulanan/tahunan (nisab setara 85 g emas).
+  4. **Zakat Perdagangan** — kas + stok + piutang dikurangi utang.
+  5. **Zakat Pertanian** — nisab 5 wasq (653 kg); 10% tadah hujan, 5% irigasi, 7,5% campuran.
+  6. **Zakat Emas & Perak** — nisab 85 g emas / 595 g perak, kadar 2,5%.
+  7. **Zakat Peternakan** — tabel klasik unta, sapi/kerbau (tabi'/musinnah), kambing/domba.
+  8. **Zakat Rikaz** — harta temuan, kadar 20% tanpa nisab & haul.
+  9. **Fidyah Puasa** — takaran 1 mud (±0,675 kg) atau 1,5 kg per hari.
+- **Hasil langsung** (live) dalam kartu gradasi hijau: status nisab, rincian, dan catatan fiqih.
+- **Panduan zakat** — pengertian, nisab, kadar, dalil (Al-Qur'an & hadits), 8 asnaf, syarat wajib.
+- **Pengaturan harga** — harga emas, perak, beras, dan takaran fitrah tersimpan permanen
+  (AsyncStorage / localStorage) dan dipakai seluruh kalkulator.
+- **Mode terang & gelap**, responsif untuk ponsel maupun web.
 
-   ```bash
-   npm install
-   ```
+## Logo & tema
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Logo aplikasi (bulan sabit + kubah masjid + tangan memberi koin + bintang delapan) dominan
+**hijau cerah** (`#22C55E`, `#4ADE80`, `#16A34A`) dengan aksen emas (`#F59E0B`).
+Berkas master: `assets/images/logo-master.png`; seluruh turunan (icon, adaptive icon, splash,
+favicon, logo putih/berwarna, icon tab) dihasilkan otomatis:
 
 ```bash
-npm run reset-project
+node scripts/generate-assets.mjs   # membutuhkan: npm i -D sharp
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+## Menjalankan aplikasi
 
-### Other setup steps
+```bash
+npm install
+npm start          # metro dev server (tekan w untuk web, a untuk Android, i untuk iOS)
+npm run web        # langsung mode web
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Uji & kualitas
 
-## Learn more
+```bash
+npm test           # uji rumus perhitungan zakat (28 pemeriksaan)
+npm run lint       # ESLint (eslint-config-expo)
+npx tsc --noEmit   # typecheck TypeScript
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Struktur kode
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+src/
+  app/                  # rute Expo Router
+    (tabs)/             #   Beranda, Panduan, Pengaturan
+    kalkulator/[jenis]  #   layar kalkulator dinamis per jenis zakat
+  components/           # komponen UI (kartu hasil, input, segmented, logo, tab)
+  constants/theme.ts    # palet hijau cerah + mode gelap
+  lib/
+    zakat.ts            # mesin perhitungan: definisi jenis, field, rumus fiqih
+    settings.tsx        # pengaturan harga tersimpan (AsyncStorage)
+    format.ts           # format rupiah/angka locale Indonesia
+scripts/
+  generate-assets.mjs   # pipeline aset logo (sharp)
+  test-zakat.ts         # uji rumus zakat (tsx)
+```
 
-## Join the community
+## Catatan fiqih
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Perhitungan mengikuti pendapat yang umum dipakai di Indonesia (mis. nisab emas 85 g,
+fitrah 2,5 kg). Rincian perbedaan pendapat dijelaskan pada tab **Panduan**.
+Penunaian zakat disarankan melalui amil resmi (BAZNAS/LAZ).
